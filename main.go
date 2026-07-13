@@ -15,7 +15,6 @@ import (
 
 const (
 	maxConcurrency = 2
-	maxFiles       = 20
 	maxFileSize    = 5 * 1024 * 1024 // 5MB for free tier
 	uploadEndpoint = "https://tinyjpg.com/backend/opt/shrink"
 )
@@ -321,13 +320,6 @@ func main() {
 	if len(validFiles) == 0 {
 		fmt.Println("No valid files to process.")
 		return
-	}
-
-	// Enforce free tier file count limit
-	if len(validFiles) > maxFiles {
-		fmt.Printf("Found %d files, but free tier limited to %d. Processing first %d.\n\n",
-			len(validFiles), maxFiles, maxFiles)
-		validFiles = validFiles[:maxFiles]
 	}
 
 	fmt.Printf("Found %d image(s) to compress (max %d concurrent)\n\n",
