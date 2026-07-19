@@ -286,16 +286,49 @@ func downloadImage(result *CompressResult) error {
 	return nil
 }
 
-func main() {
-	dir := "."
-	if len(os.Args) > 1 {
-		dir = os.Args[1]
+// scanInput resolves a command line input into image files.
+// Supported inputs:
+//   - no argument: current directory
+//   - ".": current directory
+//   - directory path: recursively scan images
+//   - image path: process the single image
+func scanInput(input string) ([]ImageFile, error) {
+	if input == "" || input == "." {
+		input = "."
 	}
 
-	fmt.Printf("TinyJPG CLI - Compressing images in %s\n", dir)
+	info, err := os.Stat(input)
+	if err != nil {
+		return nil, err
+	}
+
+	if info.IsDir() {
+		return scanImageFiles(input)
+	}
+
+	ext := strings.ToLower(filepath.Ext(input))
+	switch ext {
+	case ".jpg", ".jpeg", ".png", ".webp":
+		return []ImageFile{{
+			Path: input,
+			Name: filepath.Base(input),
+			Size: info.Size(),
+		}}, nil
+	default:
+		return nil, fmt.Errorf("unsupported image format: %s", ext)
+	}
+}
+
+func main() {
+	input := "."
+	if len(os.Args) > 1 {
+		input = os.Args[1]
+	}
+
+	fmt.Printf("TinyJPG CLI - Compressing images in %s\n", input)
 	fmt.Println(strings.Repeat("=", 50))
 
-	files, err := scanImageFiles(dir)
+	files, err := scanInput(input)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error scanning directory: %v\n", err)
 		os.Exit(1)
