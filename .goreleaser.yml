@@ -1,0 +1,37 @@
+# builds
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    binary: tinyjpg
+    main: ./main.go
+    ldflags:
+      - -s
+      - -w
+    flags:
+      - -trimpath
+
+# archives
+archives:
+  - format: binary
+
+# checksum
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+
+# release
+release:
+  header: |
+    {{ .Env.RELEASE_DESCRIPTION }}
+  draft: false
+  prerelease: false
+
+# changelog
+changelog:
+  skip: true

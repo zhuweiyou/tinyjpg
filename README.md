@@ -11,20 +11,27 @@
 - 原子替换原文件，避免写入失败导致文件损坏
 - 显示实时上传、下载进度
 
-## 安装
+## 下载
 
-```bash
-go install github.com/zhuweiyou/tinyjpg@latest
-```
+前往 [GitHub Releases](https://github.com/zhuweiyou/tinyjpg/releases) 下载对应平台的二进制文件。
 
 ## 使用
 
-```bash
-# 压缩当前目录
-tinyjpg
+### Windows
 
-# 压缩指定目录
-tinyjpg /path/to/images
+将图片文件或目录直接拖放到 `tinyjpg.exe` 上即可。
+
+### macOS / Linux
+
+```bash
+chmod +x tinyjpg
+./tinyjpg /path/to/images
+```
+
+或指定当前目录：
+
+```bash
+./tinyjpg
 ```
 
 ## 工作流程
